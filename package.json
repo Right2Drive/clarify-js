@@ -1,0 +1,48 @@
+{
+    "name": "simplify",
+    "version": "1.0.0",
+    "description": "Flatten and simplify javascript objects",
+    "main": "index.js",
+    "scripts": {
+        "test": "npm run test:chrome:single",
+        "test:chrome": "npm run test:base -- --browsers Chrome",
+        "test:edge": "npm run test:base -- --browsers Edge",
+        "test:ff": "npm run test:base -- --browsers Firefox",
+        "test:phantom": "npm run test:base -- --browsers PhantomJS",
+        "test:chrome:single": "npm run test:chrome -- --single-run",
+        "test:edge:single": "npm run test:edge -- --single-run",
+        "test:ff:single": "npm run test:ff -- --single-run",
+        "test:phantom:single": "npm run test:phantom -- --single-run",
+        "test:base": "./node_modules/.bin/karma start"
+    },
+    "keywords": [
+        "javascript",
+        "serialization",
+        "flatten",
+        "simplify"
+    ],
+    "author": "Brad Pfannmuller",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Right2Drive/simplify"
+    },
+    "devDependencies": {
+        "@types/jasmine": "2.5.53",
+        "@types/karma": "0.13.36",
+        "@types/node": "^8.0.24",
+        "@types/webpack": "3.0.9",
+        "jasmine": "2.7.0",
+        "karma": "1.7.0",
+        "karma-chrome-launcher": "2.2.0",
+        "karma-edge-launcher": "0.4.1",
+        "karma-firefox-launcher": "1.0.1",
+        "karma-jasmine": "1.1.0",
+        "karma-phantomjs-launcher": "1.0.4",
+        "karma-sourcemap-loader": "0.3.7",
+        "karma-webpack": "2.0.4",
+        "tslint": "5.6.0",
+        "typescript": "2.4.2",
+        "webpack": "3.5.5"
+    }
+}
