@@ -1,5 +1,5 @@
 import {} from "jasmine";
-import { Descriptors } from "../utils/descriptors/index";
+import { Descriptors, ICompoundDescriptor } from "../utils/descriptors/index";
 
 describe("Clarifying prototype chain", () => {
     let copy: object;

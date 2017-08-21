@@ -1,7 +1,6 @@
 import {} from "jasmine";
 
-import clarify from "../../src";
-import { compare, createDescriptors, createObject, Descriptors, ELevelType, ICompoundDescriptor } from "../utils/descriptors/index";
+import { compare, createDescriptors, createObject, Descriptors, ELevelType, ICompoundDescriptor, test } from "../utils/descriptors/index";
 
 describe("Clarifying simple objects", () => {
     let copy: object;
@@ -69,19 +68,3 @@ describe("Clarifying simple objects", () => {
     });
 
 });
-
-/**
- * Create object from descriptors, serialize2 it, and verify the contents of the serialize2d object
- *
- * @param descriptor - The descriptors defining the object to serialize2
- */
-function test(descriptor: ICompoundDescriptor) {
-    // Create object
-    const obj = createObject(descriptor);
-
-    // Create clone
-    const copy = clarify(obj);
-
-    // Ensure all necessary properties were copied
-    compare(copy, descriptor.value);
-}

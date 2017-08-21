@@ -2,9 +2,6 @@ node_modules/*
 yarn.lock
 yarn-error.log
 
-# Dist files
-index.js
-
 # Root files
 .gitignore
 tsconfig.json

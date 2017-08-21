@@ -7,11 +7,6 @@ const baseConfig = require("./base.js");
 module.exports = function() {
     return merge(baseConfig(), {
 
-        output: {
-            filename: "index.min.js",
-            path: path.resolve(__dirname, "..")
-        },
-
         plugins: [
             new webpack.LoaderOptionsPlugin({
                 minimize: true,

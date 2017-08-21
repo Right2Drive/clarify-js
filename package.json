@@ -1,6 +1,6 @@
 {
     "name": "clarify-js",
-    "version": "1.0.0",
+    "version": "0.0.2",
     "description": "Flatten and simplify javascript objects",
     "main": "index.js",
     "scripts": {

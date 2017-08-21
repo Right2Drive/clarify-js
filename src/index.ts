@@ -31,10 +31,20 @@ export default function clarify(target: object) {
     }
 }
 
+/**
+ * Clarify and serialize object to JSON string
+ *
+ * @param target object to serialize
+ */
 export function serialize(target: object) {
     return JSON.stringify(clarify(target));
 }
 
+/**
+ * Generate list of properties for an object
+ *
+ * @param target - object to fetch properties for
+ */
 function getProperties(target: object): string[] {
     const props = [];
     let curr = target;
@@ -42,11 +52,12 @@ function getProperties(target: object): string[] {
     while (curr) {
         Object.getOwnPropertyNames(curr).map(prop => {
             /************ No Functions ******** No Duplicates *************/
-            if (typeof(target[prop]) !== "function" && props.indexOf(prop) === -1) {
+            if (!isFunction(target[prop]) && props.indexOf(prop) === -1) {
                 props.push(prop);
             }
         });
 
+        // Walk the prototype chain
         curr = Object.getPrototypeOf(curr);
     }
 

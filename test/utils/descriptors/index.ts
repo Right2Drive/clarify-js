@@ -1,4 +1,5 @@
 import {} from "jasmine";
+import clarify from "../../../src/index";
 
 export type Descriptor = ISimpleDescriptor | ICompoundDescriptor;
 export type Descriptors = Descriptor[];
@@ -27,19 +28,42 @@ export interface ICompoundDescriptor extends IDescriptor {
     value: Descriptor[];
 }
 
-export function compare(copy: object, descriptors: Descriptors) {
-    descriptors.map(descriptor => {
-        if (_descriptorIsCompound(descriptor)) {
+/**
+ * Create object from descriptors, serialize2 it, and verify the contents of the serialize2d object
+ *
+ * @param descriptor - The descriptors defining the object to serialize2
+ */
+export function test(descriptor: ICompoundDescriptor) {
+    // Create object
+    const obj = createObject(descriptor);
+
+    // Create clone
+    const copy = clarify(obj);
+
+    // Ensure all necessary properties were copied
+    compare(copy, descriptor);
+}
+
+export function compare(copy: object, descriptor: ICompoundDescriptor) {
+    if (descriptor.proto) {
+        const copyProto = Object.getPrototypeOf(copy);
+        compare(copyProto, descriptor.proto);
+    }
+    descriptor.value.map(shadowDescriptor => {
+        const { name } = shadowDescriptor;
+        if (_descriptorIsCompound(shadowDescriptor)) {
             // If compound, go deeper
-            expect(copy[descriptor.name]).toBeTruthy();
-            compare(copy[descriptor.name], descriptor.value);
-        } else if (typeof(descriptor.value) === "function") {
-            // If function, should not exist
-            expect(copy[descriptor.name]).toBeFalsy();
-        } else {
-            // If primitive,
-            expect(copy[descriptor.name]).toBeTruthy();
-            expect(copy[descriptor.name]).toBe(descriptor.value);
+            expect(copy[name]).toBeTruthy();
+            compare(copy[name], shadowDescriptor);
+        }
+        else if (typeof(shadowDescriptor) === "function") {
+            // Functions shouldn't exist
+            expect(copy[name]).toBeFalsy();
+        }
+        else {
+            // Primitives should be equal
+            expect(copy[name]).toBeTruthy();
+            expect(copy[name]).toBe(shadowDescriptor.value);
         }
     });
 }
@@ -49,7 +73,7 @@ export function compare(copy: object, descriptors: Descriptors) {
  * @param descriptor
  */
 export function createObject(descriptor: ICompoundDescriptor) {
-    const obj = descriptor.proto ? Object.create(descriptor.proto) : {};
+    const obj = descriptor.proto ? Object.create(createObject(descriptor.proto)) : {};
 
     descriptor.value.map(descriptor => {
         // Define property
