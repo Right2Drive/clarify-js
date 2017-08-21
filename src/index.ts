@@ -3,11 +3,10 @@
  * TODO: Add functions as option
  * @param target
  */
-export default function simplify(target: any) {
-    const type = typeof(target);
+export default function clarify(target: object) {
 
     // Object
-    if (type === "object") {
+    if (isObject(target)) {
         // Get all the properties
         const descriptors = {};
         const props = getProperties(target);
@@ -16,27 +15,27 @@ export default function simplify(target: any) {
                 enumerable: true,
                 writable: true,
                 configurable: true,
-                value: simplify(target[prop]),
+                value: clarify(target[prop]),
             };
         });
 
         return Object.defineProperties({}, descriptors);
     }
     // Function
-    else if (type === "function") {
+    else if (isFunction(target)) {
         throw new Error("Target is a function");
     }
-    // Primitive type
+    // Primitive type (or array)
     else {
         return target;
     }
 }
 
-function getProperties(target: object): string[] {
-    if (typeof(target) !== "object") {
-        throw new Error("Target was not a object and had no properties");
-    }
+export function serialize(target: object) {
+    return JSON.stringify(clarify(target));
+}
 
+function getProperties(target: object): string[] {
     const props = [];
     let curr = target;
 
@@ -52,4 +51,16 @@ function getProperties(target: object): string[] {
     }
 
     return props;
+}
+
+function isArray(target: any) {
+    return Array.isArray(target);
+}
+
+function isObject(target: any) {
+    return ((typeof(target) === "object") && !isArray(target));
+}
+
+function isFunction(target: any) {
+    return (typeof(target) === "function");
 }
