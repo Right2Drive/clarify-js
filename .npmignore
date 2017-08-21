@@ -3,3 +3,10 @@ yarn.lock
 
 # Dist files
 index.js
+
+# Root files
+.gitignore
+tsconfig.json
+tslint.json
+webpack.config.js
+yarn-error.log
