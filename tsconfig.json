@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "moduleResolution": "node",
+        "target": "es2015",
+        "sourceMap": true,
+        "lib": [
+            "es6"
+        ],
+        "types": [
+            "webpack-env"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "test"
+    ]
+}
