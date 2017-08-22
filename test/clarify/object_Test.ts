@@ -1,14 +1,12 @@
 import {} from "jasmine";
 
-import { compare, createDescriptors, createObject, Descriptors, ELevelType, ICompoundDescriptor, test } from "../utils/descriptors/index";
+import { compare, CompoundDescriptor, createDescriptors, createObject, Descriptors, ELevelType, test } from "../utils/descriptors/index";
 
 describe("Clarifying simple objects", () => {
-    let copy: object;
-    let descriptor: ICompoundDescriptor;
+    let descriptor: CompoundDescriptor;
 
     beforeEach(() => {
         descriptor = null;
-        copy = null;
     });
 
     it("serializes flat enumerable object", () => {

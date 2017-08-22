@@ -1,7 +1,8 @@
 /**
- * TODO: Documentation
+ * Flatten an object, as well as making it's properties enumerable, writable and configurable.
  * TODO: Add functions as option
- * @param target
+ *
+ * @param target object to clarify
  */
 export default function clarify(target: object) {
 

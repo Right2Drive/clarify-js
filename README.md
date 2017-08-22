@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Right2Drive/clarify-js.svg?branch=master)](https://travis-ci.org/Right2Drive/clarify-js)
+
 # Clarify
 
 `clarify-js` is a small utility library with the intent of simplifying and/or serializing javascript objects. We all know about `JSON.stringify`, but if any of us have ever tried serializing an `Error` object, we know it doesn't always work how we might expect. 

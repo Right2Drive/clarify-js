@@ -3,6 +3,7 @@ import clarify from "../../../src/index";
 
 export type Descriptor = ISimpleDescriptor | ICompoundDescriptor;
 export type Descriptors = Descriptor[];
+export type CompoundDescriptor = ICompoundDescriptor;
 
 export enum ELevelType {
     MIXED = 0x1,
@@ -22,9 +23,9 @@ interface ISimpleDescriptor extends IDescriptor {
     value: any;
 }
 
-export interface ICompoundDescriptor extends IDescriptor {
+interface ICompoundDescriptor extends IDescriptor {
     compound: true;
-    proto: ICompoundDescriptor;
+    proto: CompoundDescriptor;
     value: Descriptor[];
 }
 
@@ -46,8 +47,7 @@ export function test(descriptor: ICompoundDescriptor) {
 
 export function compare(copy: object, descriptor: ICompoundDescriptor) {
     if (descriptor.proto) {
-        const copyProto = Object.getPrototypeOf(copy);
-        compare(copyProto, descriptor.proto);
+        compare(copy, descriptor.proto);
     }
     descriptor.value.map(shadowDescriptor => {
         const { name } = shadowDescriptor;
@@ -56,14 +56,18 @@ export function compare(copy: object, descriptor: ICompoundDescriptor) {
             expect(copy[name]).toBeTruthy();
             compare(copy[name], shadowDescriptor);
         }
-        else if (typeof(shadowDescriptor) === "function") {
+        else if (typeof(shadowDescriptor.value) === "function") {
             // Functions shouldn't exist
             expect(copy[name]).toBeFalsy();
         }
         else {
             // Primitives should be equal
             expect(copy[name]).toBeTruthy();
-            expect(copy[name]).toBe(shadowDescriptor.value);
+            if (Array.isArray(shadowDescriptor.value)) {
+                expect(_compareArrays(copy[name], shadowDescriptor.value)).toBe(true);
+            } else {
+                expect(copy[name]).toBe(shadowDescriptor.value);
+            }
         }
     });
 }
@@ -92,9 +96,9 @@ export function createObject(descriptor: ICompoundDescriptor) {
  * @param levels - Number of levels to create
  * @param type - Type of descriptors (mixed/enumerable/non-enumerable)
  */
-export function createDescriptors(levels: number, type: ELevelType, proto = null): ICompoundDescriptor {
+export function createDescriptors(levels: number, type: ELevelType, proto = null, prefix = ""): ICompoundDescriptor {
     let asciiLetter = "A".charCodeAt(0);
-    const getName = String.fromCharCode;
+    const getName = (char: number) => `${prefix}${prefix ? "_" : ""}${String.fromCharCode(char)}`;
     let descriptors;
     let previous;
 
@@ -132,10 +136,20 @@ export function createDescriptors(levels: number, type: ELevelType, proto = null
     };
 }
 
+export function addProtoChain(descriptor: ICompoundDescriptor, depth: number, descriptorLevels: number, type: ELevelType) {
+    let protoChain: ICompoundDescriptor = null;
+    for (let i = 0; i < depth; i++) {
+        protoChain = createDescriptors(descriptorLevels, type, protoChain, `proto:${depth}`);
+    }
+    descriptor.proto = protoChain;
+
+    return descriptor;
+}
+
 function _createMixedDescriptors(name1: string, name2: string, level: number) {
     return [
-        ..._createSimpleDescriptors(name1, 0, true),
-        ..._createSimpleDescriptors(name2, 0, false),
+        ..._createSimpleDescriptors(name1, level, true),
+        ..._createSimpleDescriptors(name2, level, false),
     ];
 }
 
@@ -171,14 +185,29 @@ function _createSimpleDescriptors(name: string, level: number, enumerable = true
 }
 
 function _addCompoundProp(descriptors: Descriptors, name: string, nestedDescriptors: Descriptors) {
-    Object.defineProperty(descriptors, name, {
+    const compound: ICompoundDescriptor = {
+        name,
+        compound: true,
         enumerable: true,
+        proto: null,
         value: nestedDescriptors,
-    });
+    };
+
+    descriptors.push(compound);
 
     return descriptors;
 }
 
 function _descriptorIsCompound(property: Descriptor): property is ICompoundDescriptor {
     return (property.compound);
+}
+
+function _compareArrays(arr1: any[], arr2: any[]) {
+    return (arr1.length == arr2.length && arr1.every((v, i) => {
+        if (Array.isArray(v)) {
+            return _compareArrays(v, arr2[i]);
+        } else {
+            return v === arr2[i];
+        }
+    }));
 }
