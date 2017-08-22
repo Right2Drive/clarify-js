@@ -24,3 +24,11 @@ import { serialize } from "clarify-js";
 
 const json = serialize(nonEnumerableObject);
 ```
+
+For those of you not using `import`:
+
+```
+const clarify = require("clarify-js").default;
+
+const simplifiedObject = clarify(nonEnumerableObject);
+```

@@ -8,6 +8,12 @@ npm-debug.log
 tsconfig.json
 tslint.json
 webpack.config.js
+karma.conf.js
+.travis.yml
+
+# Folders
+src/*
+test/*
 
 # webpack
 webpack/*
