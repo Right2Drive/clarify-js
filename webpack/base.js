@@ -7,10 +7,11 @@ module.exports = function() {
 
         output: {
             filename: "index.js",
-            path: path.resolve(__dirname, "..")
+            path: path.resolve(__dirname, ".."),
+            library: "clarify-js",
+            libraryTarget: "umd",
+            umdNamedDefine: true
         },
-
-        target: "web",
 
         resolve: {
             extensions: [ ".webpack.js", ".web.js", ".ts", ".js" ]

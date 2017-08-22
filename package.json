@@ -1,10 +1,10 @@
 {
     "name": "clarify-js",
-    "version": "0.0.2",
+    "version": "0.0.6",
     "description": "Flatten and simplify javascript objects",
     "main": "index.js",
     "scripts": {
-        "build": "npm run build:dev",
+        "build": "npm run build:prod",
         "build:dev": "npm run build:wp -- --env=dev",
         "build:prod": "npm run build:wp -- --env=prod",
         "build:wp": "webpack --progress --profile --colors",
