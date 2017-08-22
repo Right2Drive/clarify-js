@@ -85,7 +85,10 @@ module.exports = function (config) {
 				rules: [
 					{
 						test: /\.ts$/,
-						loaders: "awesome-typescript-loader",
+						loaders: [
+							"babel-loader?presets[]=es2015",
+							"awesome-typescript-loader"
+						],
 						exclude: [/\.(spec|e2e|d)\.ts$/]
 					}
 				]
