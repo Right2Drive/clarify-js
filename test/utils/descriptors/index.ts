@@ -122,7 +122,7 @@ export function createDescriptors(levels: number, type: ELevelType, proto = null
         if (!i) {
             descriptors = level;
         } else {
-            _addCompoundProp(previous, `level_${i}`, level);
+            _addCompoundProp(previous, `${prefix}${prefix ? "_" : ""}level_${i}`, level);
         }
         previous = level;
     }

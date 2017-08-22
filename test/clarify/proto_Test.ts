@@ -16,7 +16,7 @@ describe("Prototype chain object", () => {
             targets.push(descriptor);
         });
 
-        fit("serializes depth 1", () => {
+        it("serializes depth 1", () => {
             targets.map(addPrototype(1));
 
             test(descriptor);
@@ -87,5 +87,5 @@ function findFirstCompound(compound: CompoundDescriptor) {
 function addPrototype(depth: number) {
     return function(descriptor: CompoundDescriptor) {
         addProtoChain(descriptor, depth, 2, ELevelType.MIXED);
-    }
+    };
 }
