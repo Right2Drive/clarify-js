@@ -156,6 +156,7 @@
             false
         ],
         "no-this-assignment": false,
-        "no-shadowed-variable": false
+        "no-shadowed-variable": false,
+        "no-bitwise": false
     }
 }

@@ -1,22 +1,30 @@
+interface Options {
+    getFunctions: boolean;
+}
+
+const defaultOptions: Options = {
+    getFunctions: false,
+};
+
 /**
  * Flatten an object, as well as making it's properties enumerable, writable and configurable.
  * TODO: Add functions as option
  *
  * @param target object to clarify
  */
-export default function clarify(target: object) {
+export default function clarify(target: object, options = defaultOptions) {
 
     // Object
     if (isObject(target)) {
         // Get all the properties
         const descriptors = {};
-        const props = getProperties(target);
+        const props = getProperties(target, options.getFunctions);
         props.map(prop => {
             descriptors[prop] = {
                 enumerable: true,
                 writable: true,
                 configurable: true,
-                value: clarify(target[prop]),
+                value: clarify(target[prop], options),
             };
         });
 
@@ -46,14 +54,14 @@ export function serialize(target: object) {
  *
  * @param target - object to fetch properties for
  */
-function getProperties(target: object): string[] {
+function getProperties(target: object, getFunctions: boolean): string[] {
     const props = [];
     let curr = target;
 
     while (curr) {
         Object.getOwnPropertyNames(curr).map(prop => {
             /************ No Functions ******** No Duplicates *************/
-            if (!isFunction(target[prop]) && props.indexOf(prop) === -1) {
+            if ((getFunctions || !isFunction(target[prop])) && props.indexOf(prop) === -1) {
                 props.push(prop);
             }
         });

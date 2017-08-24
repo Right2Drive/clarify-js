@@ -8,7 +8,7 @@
         "build:dev": "npm run build:wp -- --env=dev",
         "build:prod": "npm run build:wp -- --env=prod",
         "build:wp": "webpack --progress --profile --colors",
-        "watch": "npm run build:dev -- -w",
+        "watch": "npm run build:prod -- -w",
         "test": "npm run test:chrome:single",
         "test:chrome": "npm run test:base -- --browsers Chrome",
         "test:edge": "npm run test:base -- --browsers Edge",
